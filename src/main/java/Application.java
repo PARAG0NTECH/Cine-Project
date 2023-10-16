@@ -7,10 +7,6 @@ import entities.Statistics;
 import repositories.*;
 import utils.Util;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Application {

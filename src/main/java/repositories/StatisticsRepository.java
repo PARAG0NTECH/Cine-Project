@@ -1,6 +1,5 @@
 package repositories;
 
-import entities.Computer;
 import entities.Statistics;
 
 import java.sql.Connection;
