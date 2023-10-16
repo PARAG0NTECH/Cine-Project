@@ -6,9 +6,13 @@ import java.sql.SQLException;
 
 public class ConnectionMySql {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/cineproject";
+    private static final String URL = "jdbc:mysql://localhost:3306/cineguardian";
+
+    // Mude essas variáveis para seu usuário do MYSQL
     private static final String USER = "root";
-    private static final String PASSWORD = "123456";
+
+    // Mude essas variáveis para sua senha do MYSQL
+    private static final String PASSWORD = "my-secret";
 
     public Connection open() {
         Connection connection = null;
