@@ -64,4 +64,5 @@ CREATE TABLE tb_statistics (
 SELECT * FROM tb_computers;
 SELECT * FROM tb_cpu;
 SELECT * FROM tb_disk;
+SELECT * FROM tb_statistics;
 

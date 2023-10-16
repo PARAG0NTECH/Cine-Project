@@ -15,6 +15,10 @@ public class Computer {
     public Computer() {
     }
 
+    public Computer(Integer id){
+        this.id = id;
+    }
+
     public Computer(String hostname, String maker, String systemInfo, Cpu cpu, Disk disk) {
         this.hostname = hostname;
         this.maker = maker;
