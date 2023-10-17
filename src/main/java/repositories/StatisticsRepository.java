@@ -11,7 +11,9 @@ public class StatisticsRepository {
 
     private ConnectionMySql connectionMySql;
 
-    public StatisticsRepository(){}
+    public StatisticsRepository(){
+        connectionMySql = new ConnectionMySql();
+    }
 
     public StatisticsRepository(ConnectionMySql connectionMySql){
         this.connectionMySql = connectionMySql;
