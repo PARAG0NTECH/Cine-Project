@@ -22,13 +22,19 @@ public class Application {
     public static void main(String[] args) {
         Looca looca = new Looca();
         if(args.length > 0){
-            String SETUP = args[0];
-            String USER_DATABASE = args[1];
-            String PASSWORD_DATABASE = args[2];
-            if(SETUP.toUpperCase().equals("SETUP")){
-                setup();
+            if(args.length > 2){
+                String SETUP = args[0];
+                if(SETUP.toUpperCase().equals("SETUP")){
+                    setup();
+                }
+                String USER_DATABASE = args[1];
+                String PASSWORD_DATABASE = args[2];
+                STATISTICS_REPOSITORY.setConnectionMySql(new ConnectionMySql(USER_DATABASE, PASSWORD_DATABASE));
+            } else {
+                String USER_DATABASE = args[0];
+                String PASSWORD_DATABASE = args[1];
+                STATISTICS_REPOSITORY.setConnectionMySql(new ConnectionMySql(USER_DATABASE, PASSWORD_DATABASE));
             }
-            STATISTICS_REPOSITORY.setConnectionMySql(new ConnectionMySql(USER_DATABASE, PASSWORD_DATABASE));
         }
 
         Statistics statistics = new Statistics();
