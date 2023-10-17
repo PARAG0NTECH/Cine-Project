@@ -2,9 +2,8 @@ package entities;
 
 public class Statistics {
 
-    private Integer id;
     private Computer computer;
-    private Double temperature;
+    private String temperature;
     private Double cpuUsage;
     private Double ramUsage;
     private Double ramAvailable;
@@ -14,7 +13,7 @@ public class Statistics {
 
     public Statistics() {}
 
-    public Statistics(Computer computer, Double temperature, Double cpuUsage, Double ramUsage, Double ramAvailable, Double ramTotal, Double diskTotal, Double diskUsage) {
+    public Statistics(Computer computer, String temperature, Double cpuUsage, Double ramUsage, Double ramAvailable, Double ramTotal, Double diskTotal, Double diskUsage) {
         this.computer = computer;
         this.temperature = temperature;
         this.cpuUsage = cpuUsage;
@@ -25,13 +24,6 @@ public class Statistics {
         this.diskUsage = diskUsage;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Computer getComputer() {
         return computer;
@@ -41,11 +33,11 @@ public class Statistics {
         this.computer = computer;
     }
 
-    public Double getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Double temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 

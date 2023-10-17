@@ -4,6 +4,7 @@ import entities.Computer;
 import entities.Cpu;
 import entities.Disk;
 import entities.Statistics;
+import oshi.SystemInfo;
 import repositories.*;
 import utils.Util;
 
@@ -19,13 +20,12 @@ public class Application {
     private static Computer computer = new Computer(1);
 
     public static void main(String[] args) {
-        setup(); // ATENÇÃO: Quando for executar mais de uma vez retire essa linha
         Looca looca = new Looca();
         Statistics statistics = new Statistics();
 
         Util.setInterval(() -> {
             statistics.setComputer(computer);
-            statistics.setTemperature(looca.getTemperatura().getTemperatura());
+            statistics.setTemperature((new SystemInfo()).getHardware().toString());
             statistics.setCpuUsage(looca.getProcessador().getUso());
             statistics.setRamUsage(looca.getMemoria().getEmUso().doubleValue());
             statistics.setRamAvailable(looca.getMemoria().getDisponivel().doubleValue());
