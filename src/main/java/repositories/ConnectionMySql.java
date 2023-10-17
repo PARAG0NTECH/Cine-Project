@@ -9,10 +9,10 @@ public class ConnectionMySql {
     private static final String URL = "jdbc:mysql://localhost:3306/cineguardian";
 
     // Mude essas variáveis para seu usuário do MYSQL
-    private static final String USER = "root";
+    private static final String USER = "aluno";
 
     // Mude essas variáveis para sua senha do MYSQL
-    private static final String PASSWORD = "my-secret";
+    private static final String PASSWORD = "aluno";
 
     public Connection open() {
         Connection connection = null;

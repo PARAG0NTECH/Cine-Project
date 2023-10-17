@@ -19,7 +19,7 @@ public class Application {
     private static Computer computer = new Computer(1);
 
     public static void main(String[] args) {
-        setup(); // ATENÇÃO: Quando for executar mais de uma vez retire essa linha
+
         Looca looca = new Looca();
         Statistics statistics = new Statistics();
 
