@@ -11,6 +11,8 @@ public class StatisticsRepository {
 
     private ConnectionMySql connectionMySql;
 
+    public StatisticsRepository(){}
+
     public StatisticsRepository(ConnectionMySql connectionMySql){
         this.connectionMySql = connectionMySql;
     }
@@ -24,7 +26,7 @@ public class StatisticsRepository {
         Connection conn = connectionMySql.open();
         try (PreparedStatement st = conn.prepareStatement(command)) {
             st.setInt(1, statistics.getComputer().getId());
-            st.setDouble(2, statistics.getTemperature().hashCode());
+            st.setDouble(2, statistics.getTemperature());
             st.setDouble(3, statistics.getCpuUsage());
             st.setDouble(4, statistics.getRamUsage());
             st.setDouble(5, statistics.getRamAvailable());
@@ -37,5 +39,9 @@ public class StatisticsRepository {
         } finally {
             connectionMySql.close(conn);
         }
+    }
+
+    public void setConnectionMySql(ConnectionMySql connectionMySql){
+        this.connectionMySql = connectionMySql;
     }
 }

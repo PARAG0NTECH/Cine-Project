@@ -15,17 +15,26 @@ public class Application {
     private final static ComputerRepository COMPUTER_REPOSITORY = new ComputerRepository(new ConnectionMySql());
     private final static CpuRepository CPU_REPOSITORY = new CpuRepository(new ConnectionMySql());
     private final static DiskRepository DISK_REPOSITORY = new DiskRepository(new ConnectionMySql());
-    private final static StatisticsRepository STATISTICS_REPOSITORY = new StatisticsRepository(new ConnectionMySql());
+    private final static StatisticsRepository STATISTICS_REPOSITORY = new StatisticsRepository();
 
     private static Computer computer = new Computer(1);
 
     public static void main(String[] args) {
         Looca looca = new Looca();
-        Statistics statistics = new Statistics();
+        if(args.length > 0){
+            String SETUP = args[0];
+            String USER_DATABASE = args[1];
+            String PASSWORD_DATABASE = args[2];
+            if(SETUP.toUpperCase().equals("SETUP")){
+                setup();
+            }
+            STATISTICS_REPOSITORY.setConnectionMySql(new ConnectionMySql(USER_DATABASE, PASSWORD_DATABASE));
+        }
 
+        Statistics statistics = new Statistics();
         Util.setInterval(() -> {
             statistics.setComputer(computer);
-            statistics.setTemperature((new SystemInfo()).getHardware().toString());
+            statistics.setTemperature(looca.getTemperatura().getTemperatura());
             statistics.setCpuUsage(looca.getProcessador().getUso());
             statistics.setRamUsage(looca.getMemoria().getEmUso().doubleValue());
             statistics.setRamAvailable(looca.getMemoria().getDisponivel().doubleValue());

@@ -7,18 +7,24 @@ import java.sql.SQLException;
 public class ConnectionMySql {
 
     private static final String URL = "jdbc:mysql://localhost:3306/cineguardian";
+    private String user;
+    private String password;
 
-    // Mude essas variáveis para seu usuário do MYSQL
-    private static final String USER = "aluno";
+    public ConnectionMySql(){
+        this.user = "root";
+        this.password = "my-secret";
+    }
 
-    // Mude essas variáveis para sua senha do MYSQL
-    private static final String PASSWORD = "aluno";
+    public ConnectionMySql(String user, String password){
+        this.user = user;
+        this.password = password;
+    }
 
     public Connection open() {
         Connection connection = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            connection = DriverManager.getConnection(URL, this.user, this.password);
         } catch (ClassNotFoundException e) {
             System.out.println("Driver JDBC não encontrado");
             e.printStackTrace();

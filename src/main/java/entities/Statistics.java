@@ -3,7 +3,7 @@ package entities;
 public class Statistics {
 
     private Computer computer;
-    private String temperature;
+    private Double temperature;
     private Double cpuUsage;
     private Double ramUsage;
     private Double ramAvailable;
@@ -13,7 +13,7 @@ public class Statistics {
 
     public Statistics() {}
 
-    public Statistics(Computer computer, String temperature, Double cpuUsage, Double ramUsage, Double ramAvailable, Double ramTotal, Double diskTotal, Double diskUsage) {
+    public Statistics(Computer computer, Double temperature, Double cpuUsage, Double ramUsage, Double ramAvailable, Double ramTotal, Double diskTotal, Double diskUsage) {
         this.computer = computer;
         this.temperature = temperature;
         this.cpuUsage = cpuUsage;
@@ -33,11 +33,11 @@ public class Statistics {
         this.computer = computer;
     }
 
-    public String getTemperature() {
+    public Double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(Double temperature) {
         this.temperature = temperature;
     }
 
