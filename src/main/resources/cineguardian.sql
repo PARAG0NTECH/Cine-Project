@@ -61,8 +61,19 @@ CREATE TABLE tb_statistics (
     FOREIGN KEY (id_computer) REFERENCES tb_computers (id)
 );
 
+CREATE TABLE tb_network (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_computer INTEGER,
+    name VARCHAR(255),
+    mac_address VARCHAR(255),
+    packages_received INTEGER,
+    packages_sent INTEGER,
+    FOREIGN KEY (id_computer) REFERENCES  tb_computers (id)
+);
+
 SELECT * FROM tb_computers;
 SELECT * FROM tb_cpu;
 SELECT * FROM tb_disk;
 SELECT * FROM tb_statistics;
+SELECT * FROM tb_network;
 

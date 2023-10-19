@@ -1,9 +1,7 @@
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.Disco;
-import entities.Computer;
-import entities.Cpu;
-import entities.Disk;
-import entities.Statistics;
+import com.github.britooo.looca.api.group.rede.RedeInterface;
+import entities.*;
 import oshi.SystemInfo;
 import repositories.*;
 import utils.Util;
@@ -15,6 +13,7 @@ public class Application {
     private final static ComputerRepository COMPUTER_REPOSITORY = new ComputerRepository(new ConnectionMySql());
     private final static CpuRepository CPU_REPOSITORY = new CpuRepository(new ConnectionMySql());
     private final static DiskRepository DISK_REPOSITORY = new DiskRepository(new ConnectionMySql());
+    private final static NetworkRepository NETWORK_REPOSITORY = new NetworkRepository(new ConnectionMySql());
     private final static StatisticsRepository STATISTICS_REPOSITORY = new StatisticsRepository();
 
     private static Computer computer = new Computer(1);
@@ -36,7 +35,6 @@ public class Application {
                 STATISTICS_REPOSITORY.setConnectionMySql(new ConnectionMySql(USER_DATABASE, PASSWORD_DATABASE));
             }
         }
-
         Statistics statistics = new Statistics();
         Util.setInterval(() -> {
             statistics.setComputer(computer);
@@ -62,7 +60,6 @@ public class Application {
             disk.setModel(d.getModelo());
             disk.setId(d.getSerial());
         }
-
         computer.setHostname(looca.getRede().getParametros().getHostName());
         computer.setSystemInfo(looca.getSistema().getSistemaOperacional());
         computer.setMaker(looca.getSistema().getFabricante());
@@ -72,6 +69,11 @@ public class Application {
         DISK_REPOSITORY.save(disk);
         CPU_REPOSITORY.save(cpu);
         COMPUTER_REPOSITORY.save(computer);
+
         Application.computer = computer;
+        Application.computer.setId(1);
+        Network net = new Network(Application.computer, looca.getRede().getGrupoDeInterfaces().getInterfaces().get(0));
+
+        NETWORK_REPOSITORY.save(net);
     }
 }
