@@ -11,8 +11,8 @@ public class ConnectionMySql {
     private String password;
 
     public ConnectionMySql(){
-        this.user = "aluno";
-        this.password = "aluno";
+        this.user = "admin";
+        this.password = "admin";
     }
 
     public ConnectionMySql(String user, String password){
