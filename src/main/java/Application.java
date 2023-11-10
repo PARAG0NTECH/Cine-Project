@@ -1,11 +1,14 @@
+import Slack.Slack;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.Disco;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
 import entities.*;
+import org.json.JSONObject;
 import oshi.SystemInfo;
 import repositories.*;
 import utils.Util;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class Application {
@@ -18,7 +21,17 @@ public class Application {
 
     private static Computer computer = new Computer(1);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        //<SLACK>
+        JSONObject json01 = new JSONObject();
+        json01.put("text", "*Teste* Alertando totem!! :shrug");
+        Slack.enviarAlertaToten(json01);
+
+        JSONObject json02 = new JSONObject();
+        json02.put("text", "*Teste* Chamando suporte!!! :shrug");
+        Slack.enviarAlertaSuporte(json02);
+
         Looca looca = new Looca();
         if(args.length > 0){
             if(args.length > 2){
