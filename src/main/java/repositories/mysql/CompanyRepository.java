@@ -1,34 +1,39 @@
-package repositories;
+package repositories.mysql;
 
-import entities.Disk;
+import entities.Company;
+import repositories.connections.ConnectionMySql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DiskRepository {
+public class CompanyRepository {
 
     private ConnectionMySql connectionMySql;
 
-    public DiskRepository(ConnectionMySql connectionMySql){
+    public CompanyRepository(ConnectionMySql connectionMySql){
         this.connectionMySql = connectionMySql;
     }
 
-    public void save(Disk disk) {
+    public Company findById(Integer id) {
         String command = """
-            INSERT INTO tb_disk (id, model) VALUES (?, ?);
+            SELECT * FROM tb_company WHERE id = ?
         """;
 
         Connection conn = connectionMySql.open();
         try (PreparedStatement st = conn.prepareStatement(command)) {
-            st.setString(1, disk.getId());
-            st.setString(2, disk.getModel());
+            st.setInt(1, id.intValue());
+            ResultSet resultSet = st.getResultSet();
+            if(resultSet.first()){
+                return new Company(id);
+            }
             st.execute();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
             connectionMySql.close(conn);
         }
+        return null;
     }
 }

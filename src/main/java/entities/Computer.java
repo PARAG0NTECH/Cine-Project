@@ -12,6 +12,8 @@ public class Computer {
 
     private Disk disk;
 
+    private Company company;
+
     public Computer() {
     }
 
@@ -19,12 +21,14 @@ public class Computer {
         this.id = id;
     }
 
-    public Computer(String hostname, String maker, String systemInfo, Cpu cpu, Disk disk) {
+    public Computer(Integer id, String hostname, String maker, String systemInfo, Cpu cpu, Disk disk, Company company) {
+        this.id = id;
         this.hostname = hostname;
         this.maker = maker;
         this.systemInfo = systemInfo;
         this.cpu = cpu;
         this.disk = disk;
+        this.company = company;
     }
 
     public Integer getId() {
@@ -73,5 +77,13 @@ public class Computer {
 
     public void setDisk(Disk disk) {
         this.disk = disk;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

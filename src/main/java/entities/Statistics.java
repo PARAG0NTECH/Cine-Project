@@ -88,4 +88,18 @@ public class Statistics {
     public void setDiskUsage(Double diskUsage) {
         this.diskUsage = diskUsage;
     }
+
+    @Override
+    public String toString() {
+        return "Statistics{" +
+                "computer=" + computer.getId() +
+                ", temperature=" + temperature +
+                ", cpuUsage=" + cpuUsage +
+                ", ramUsage=" + ramUsage +
+                ", ramAvailable=" + ramAvailable +
+                ", ramTotal=" + ramTotal +
+                ", diskTotal=" + diskTotal +
+                ", diskUsage=" + diskUsage +
+                '}';
+    }
 }

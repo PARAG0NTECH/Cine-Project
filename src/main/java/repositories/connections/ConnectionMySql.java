@@ -1,4 +1,4 @@
-package repositories;
+package repositories.connections;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,8 +11,8 @@ public class ConnectionMySql {
     private String password;
 
     public ConnectionMySql(){
-        this.user = "aluno";
-        this.password = "aluno";
+        this.user = "root";
+        this.password = "my-secret";
     }
 
     public ConnectionMySql(String user, String password){

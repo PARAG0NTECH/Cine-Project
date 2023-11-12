@@ -1,6 +1,7 @@
-package repositories;
+package repositories.mysql;
 
 import entities.Statistics;
+import repositories.connections.ConnectionMySql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

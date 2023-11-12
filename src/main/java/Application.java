@@ -1,14 +1,11 @@
-import Slack.Slack;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.Disco;
-import com.github.britooo.looca.api.group.rede.RedeInterface;
 import entities.*;
-import org.json.JSONObject;
-import oshi.SystemInfo;
-import repositories.*;
+import repositories.connections.ConnectionMySql;
+import repositories.mysql.*;
 import utils.Util;
 
-import java.io.IOException;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 public class Application {
@@ -17,22 +14,13 @@ public class Application {
     private final static CpuRepository CPU_REPOSITORY = new CpuRepository(new ConnectionMySql());
     private final static DiskRepository DISK_REPOSITORY = new DiskRepository(new ConnectionMySql());
     private final static NetworkRepository NETWORK_REPOSITORY = new NetworkRepository(new ConnectionMySql());
+    private final static AlertRepository ALERT_REPOSITORY = new AlertRepository(new ConnectionMySql());
     private final static StatisticsRepository STATISTICS_REPOSITORY = new StatisticsRepository();
 
-    private static Computer computer = new Computer(1);
+    private static int i = 0;
+    private static int logCounter = 1;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        //<SLACK>
-        JSONObject json01 = new JSONObject();
-        json01.put("text", "*Teste* Alertando totem!! :shrug");
-        Slack.enviarAlertaToten(json01);
-
-        JSONObject json02 = new JSONObject();
-        json02.put("text", "*Teste* Chamando suporte!!! :shrug");
-        Slack.enviarAlertaSuporte(json02);
-
-        Looca looca = new Looca();
+    public static void main(String[] args) throws Exception {
         if(args.length > 0){
             if(args.length > 2){
                 String SETUP = args[0];
@@ -50,16 +38,17 @@ public class Application {
         }
         Statistics statistics = new Statistics();
         Util.setInterval(() -> {
-            statistics.setComputer(computer);
-            statistics.setTemperature(looca.getTemperatura().getTemperatura());
-            statistics.setCpuUsage(looca.getProcessador().getUso());
-            statistics.setRamUsage(looca.getMemoria().getEmUso().doubleValue());
-            statistics.setRamAvailable(looca.getMemoria().getDisponivel().doubleValue());
-            statistics.setRamTotal(looca.getMemoria().getTotal().doubleValue());
-            statistics.setDiskTotal(looca.getGrupoDeDiscos().getTamanhoTotal().doubleValue());
-            statistics.setDiskUsage(looca.getGrupoDeDiscos().getTamanhoTotal().doubleValue());
+            fillFields(statistics);
 
             STATISTICS_REPOSITORY.save(statistics);
+
+            if(i == 10){
+                Util.createTextFileInRootDirectory(statistics, "logs" + logCounter + Instant.now());
+                logCounter++;
+                i = 0;
+            }
+            i++;
+
         }, 2, TimeUnit.SECONDS);
     }
 
@@ -78,15 +67,60 @@ public class Application {
         computer.setMaker(looca.getSistema().getFabricante());
         computer.setDisk(disk);
         computer.setCpu(cpu);
+        computer.setCompany(new Company(1));
 
         DISK_REPOSITORY.save(disk);
         CPU_REPOSITORY.save(cpu);
         COMPUTER_REPOSITORY.save(computer);
 
-        Application.computer = computer;
-        Application.computer.setId(1);
-        Network net = new Network(Application.computer, looca.getRede().getGrupoDeInterfaces().getInterfaces().get(0));
+        computer = COMPUTER_REPOSITORY.findByCpuId(computer.getCpu().getId());
+        Network net = new Network(computer, looca.getRede().getGrupoDeInterfaces().getInterfaces().get(0));
 
         NETWORK_REPOSITORY.save(net);
+    }
+
+    private static double calculateGigaBytes(double value) {
+        return value / 1024 / 1024 / 1024;
+    }
+
+    private static void fillFields(Statistics statistics) {
+        Looca looca = new Looca();
+
+        double cpuUsage = looca.getProcessador().getUso();
+        double ramUsage = calculateGigaBytes(looca.getMemoria().getEmUso().doubleValue());
+        double ramAvaliable = calculateGigaBytes(looca.getMemoria().getDisponivel().doubleValue());
+        double ramTotal = calculateGigaBytes(looca.getMemoria().getTotal().doubleValue());
+        double diskTotal = calculateGigaBytes(looca.getGrupoDeDiscos().getTamanhoTotal().doubleValue());
+        double diskUsage = 0.0;
+
+        statistics.setComputer(new Computer(COMPUTER_REPOSITORY.countComputers()));
+        statistics.setTemperature(looca.getTemperatura().getTemperatura());
+        statistics.setCpuUsage(cpuUsage);
+        statistics.setRamUsage(ramUsage);
+        statistics.setRamAvailable(ramAvaliable);
+        statistics.setRamTotal(ramTotal);
+        statistics.setDiskTotal(diskTotal);
+        for (Disco disco : looca.getGrupoDeDiscos().getDiscos()) {
+            diskUsage = (double) disco.getBytesDeEscritas();
+            statistics.setDiskUsage(calculateGigaBytes(diskUsage));
+        }
+
+        sendAlerts(cpuUsage, diskUsage, ramUsage);
+    }
+
+    private static void sendAlerts(double cpuUsage, double diskUsage, double ramUsage) {
+
+        Alert alert = ALERT_REPOSITORY.findByCompany(new Company(1));
+
+        double taxCpu = cpuUsage * (alert.getPercentualCpu() / 100);
+        double taxDisk = cpuUsage * (alert.getPercentualCpu() / 100);
+        double taxRam = cpuUsage * (alert.getPercentualCpu() / 100);
+
+        if(cpuUsage >= taxCpu ||
+           diskUsage >= taxDisk ||
+           ramUsage >= taxRam){
+            Util.sendAlert(alert);
+        }
+
     }
 }
