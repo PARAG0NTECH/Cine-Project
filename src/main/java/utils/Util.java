@@ -24,13 +24,15 @@ public abstract class Util {
         scheduler.scheduleAtFixedRate(task, 0, interval, timeUnit);
     }
 
-    public static void sendAlert(Alert alert){
-        String slackToken = "SLACK_TOKEN_USER";
+    public static void sendAlert(double taxCpu, double taxDisk, double taxRam, double cpuUsage, double diskUsage, double ramUsage){
+        String slackToken = "xoxp-6214323179937-6224675652064-6201610227139-cdbb4e1b24d9a6034dcdf4b9e86af615";
         Slack slack = Slack.getInstance();
 
+        String message = buildMessage(taxCpu, taxDisk, taxRam, cpuUsage, diskUsage, ramUsage);
+
         ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                .channel("#test-integracao")
-                .text("Olá, Slack! Esta é uma mensagem de integração.")
+                .channel("#avisos")
+                .text(message)
                 .build();
 
         try {
@@ -75,6 +77,27 @@ public abstract class Util {
         }
     }
 
+    private static String buildMessage(double taxCpu, double taxDisk, double taxRam, double cpuUsage, double diskUsage, double ramUsage){
+        StringBuilder builder = new StringBuilder();
+        if(cpuUsage > taxCpu){
+            builder.append("O uso da CPU está muito ALTO! ❌\n");
+        } else {
+            builder.append("O uso da CPU está OK!  ✅\n");
+        }
+
+        if(diskUsage > taxDisk){
+            builder.append("O armazenamento está muito ALTO! ❌ (pouco espaço)\n");
+        } else {
+            builder.append("O armazenamento está OK!  ✅\n");
+        }
+
+        if(ramUsage > taxRam){
+            builder.append("O uso da RAM está muito ALTA! ❌\n");
+        } else {
+            builder.append("O uso da RAM está OK!  ✅\n");
+        }
+        return builder.toString();
+    }
 
     private static String templateLog(Statistics statistics) {
         return

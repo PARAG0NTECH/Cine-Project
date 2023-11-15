@@ -20,7 +20,7 @@ public class Application {
     private static int i = 0;
     private static int logCounter = 1;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if(args.length > 0){
             setup();
         }
@@ -108,13 +108,13 @@ public class Application {
         Alert alert = ALERT_REPOSITORY.findByCompany(new Company(1), new ConnectionSqlServer());
 
         double taxCpu = cpuUsage * (alert.getPercentualCpu() / 100);
-        double taxDisk = cpuUsage * (alert.getPercentualCpu() / 100);
-        double taxRam = cpuUsage * (alert.getPercentualCpu() / 100);
+        double taxDisk = diskUsage * (alert.getPercentualCpu() / 100);
+        double taxRam = ramUsage * (alert.getPercentualCpu() / 100);
 
         if(cpuUsage >= taxCpu ||
            diskUsage >= taxDisk ||
            ramUsage >= taxRam){
-            Util.sendAlert(alert);
+            Util.sendAlert(taxCpu, taxDisk, taxRam, cpuUsage, diskUsage, ramUsage);
         }
 
     }
