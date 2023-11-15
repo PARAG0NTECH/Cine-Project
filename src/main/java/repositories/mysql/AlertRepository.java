@@ -2,6 +2,7 @@ package repositories.mysql;
 
 import entities.Alert;
 import entities.Company;
+import repositories.connections.ConnectionDatabase;
 import repositories.connections.ConnectionMySql;
 
 import java.sql.Connection;
@@ -13,16 +14,12 @@ public class AlertRepository {
 
     private ConnectionMySql connectionMySql;
 
-    public AlertRepository(ConnectionMySql connectionMySql){
-        this.connectionMySql = connectionMySql;
-    }
-
-    public Alert findByCompany(Company company) {
+    public Alert findByCompany(Company company, ConnectionDatabase database) {
         String command = """
             SELECT * FROM tb_alerts WHERE tb_companies_id = ?
         """;
 
-        Connection conn = connectionMySql.open();
+        Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {
             st.setInt(1, company.getId().intValue());
             st.execute();
@@ -38,7 +35,7 @@ public class AlertRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            connectionMySql.close(conn);
+            database.closeConnection(conn);
         }
         return null;
     }

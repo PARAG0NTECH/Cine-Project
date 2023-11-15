@@ -1,6 +1,7 @@
 package repositories.mysql;
 
 import entities.Network;
+import repositories.connections.ConnectionDatabase;
 import repositories.connections.ConnectionMySql;
 
 import java.sql.Connection;
@@ -9,24 +10,13 @@ import java.sql.SQLException;
 
 public class NetworkRepository {
 
-
-    private ConnectionMySql connectionMySql;
-
-    public NetworkRepository(){
-        connectionMySql = new ConnectionMySql();
-    }
-
-    public NetworkRepository(ConnectionMySql connectionMySql){
-        this.connectionMySql = connectionMySql;
-    }
-
-    public void save(Network network) {
+    public void save(Network network, ConnectionDatabase database) {
         String command = """
             INSERT INTO tb_network (id_computer, name, mac_address, packages_received, packages_sent)
             VALUES (?, ?, ?, ?, ?);
         """;
 
-        Connection conn = connectionMySql.open();
+        Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {
             st.setInt(1, network.getComputer().getId());
             st.setString(2, network.getName());
@@ -37,11 +27,7 @@ public class NetworkRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            connectionMySql.close(conn);
+            database.closeConnection(conn);
         }
-    }
-
-    public void setConnectionMySql(ConnectionMySql connectionMySql){
-        this.connectionMySql = connectionMySql;
     }
 }

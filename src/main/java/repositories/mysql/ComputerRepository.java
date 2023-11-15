@@ -1,6 +1,7 @@
 package repositories.mysql;
 
 import entities.Computer;
+import repositories.connections.ConnectionDatabase;
 import repositories.connections.ConnectionMySql;
 
 import java.sql.Connection;
@@ -10,18 +11,12 @@ import java.sql.SQLException;
 
 public class ComputerRepository {
 
-    private ConnectionMySql connectionMySql;
-
-    public ComputerRepository(ConnectionMySql connectionMySql){
-        this.connectionMySql = connectionMySql;
-    }
-
-    public void save(Computer computer) {
+    public void save(Computer computer, ConnectionDatabase database) {
         String command = """
             INSERT INTO tb_computers (hostname, maker, system_info, id_cpu, id_disk, tb_companies_id) VALUES (?, ?, ?, ?, ?, ?);
         """;
 
-        Connection conn = connectionMySql.open();
+        Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {
             st.setString(1, computer.getHostname());
             st.setString(2, computer.getMaker());
@@ -33,14 +28,14 @@ public class ComputerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            connectionMySql.close(conn);
+            database.closeConnection(conn);
         }
     }
 
-    public Computer findByCpuId(String cpuId) {
+    public Computer findByCpuId(String cpuId, ConnectionDatabase database) {
         String command = "SELECT * FROM tb_computers WHERE id_cpu = ?";
 
-        Connection conn = connectionMySql.open();
+        Connection conn = database.getConnection();
 
         try (PreparedStatement st = conn.prepareStatement(command)) {
             st.setString(1, cpuId);
@@ -52,16 +47,16 @@ public class ComputerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            connectionMySql.close(conn);
+            database.closeConnection(conn);
         }
 
         return null;
     }
 
-    public int countComputers(){
+    public int countComputers(ConnectionDatabase database){
         String query = "SELECT COUNT(*) FROM tb_computers";
 
-        Connection conn = connectionMySql.open();
+        Connection conn = database.getConnection();
 
         try (PreparedStatement st = conn.prepareStatement(query)) {
 
@@ -73,6 +68,8 @@ public class ComputerRepository {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection(conn);
         }
 
         return 0;

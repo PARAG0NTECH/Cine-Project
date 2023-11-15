@@ -97,31 +97,36 @@ GO
 -- -----------------------------------------------------
 -- Table tb_statistics
 -- -----------------------------------------------------
-CREATE TABLE tb_statistics (
-    id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    id_computer INT NULL,
-    temperature DOUBLE NULL,
-    cpu_usage DOUBLE NULL,
-    ram_usage DOUBLE NULL,
-    ram_available DOUBLE NULL,
-    ram_total DOUBLE NULL,
-    disk_total DOUBLE NULL,
-    disk_usage DOUBLE NULL,
-    CONSTRAINT fk_tb_statistics_tb_computers1 FOREIGN KEY (id_computer) REFERENCES tb_computers(id)
-    );
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tb_statistics')
+    BEGIN
+        CREATE TABLE tb_statistics (
+                                       id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+                                       id_computer INT NULL,
+                                       temperature FLOAT NULL,
+                                       cpu_usage FLOAT NULL,
+                                       ram_usage FLOAT NULL,
+                                       ram_available FLOAT NULL,
+                                       ram_total FLOAT NULL,
+                                       disk_total FLOAT NULL,
+                                       disk_usage FLOAT NULL,
+                                       CONSTRAINT fk_tb_statistics_tb_computers1 FOREIGN KEY (id_computer) REFERENCES tb_computers(id)
+        );
+    END;
 GO
-
 -- -----------------------------------------------------
 -- Table tb_alerts
 -- -----------------------------------------------------
-CREATE TABLE tb_alerts (
-    id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    tb_companies_id INT NOT NULL,
-    percentual_cpu DOUBLE NULL,
-    percentual_disk DOUBLE NULL,
-    percentual_ram DOUBLE NULL,
-    CONSTRAINT fk_tb_alerts_tb_companies1 FOREIGN KEY (tb_companies_id) REFERENCES tb_companies(id)
-    );
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tb_alerts')
+    BEGIN
+        CREATE TABLE tb_alerts (
+                                   id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+                                   tb_companies_id INT NOT NULL,
+                                   percentual_cpu FLOAT NULL,
+                                   percentual_disk FLOAT NULL,
+                                   percentual_ram FLOAT NULL,
+                                   CONSTRAINT fk_tb_alerts_tb_companies1 FOREIGN KEY (tb_companies_id) REFERENCES tb_companies(id)
+        );
+    END;
 GO
 
 -- Sample data (use INSERT INTO statements accordingly)
@@ -139,3 +144,11 @@ SELECT * FROM tb_alerts;
 
 -- Adapted SELECT statement for SQL Server
 SELECT * FROM tb_computers WHERE id_cpu = 'bfebfbff000806c1';
+INSERT INTO tb_users (name, email, password)
+VALUES ('Test', 'test@gmail.com', 'test123');
+
+INSERT INTO tb_companies (id_address, tb_users_id, name, cnpj)
+VALUES (1, 1, 'Cine Paulista', '23.222.334/0001-09');
+
+INSERT INTO tb_alerts (tb_companies_id, percentual_cpu, percentual_disk, percentual_ram)
+VALUES (1, 50, 50, 50);

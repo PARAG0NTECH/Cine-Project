@@ -1,6 +1,7 @@
 package entities;
 
 import com.github.britooo.looca.api.group.rede.RedeInterface;
+import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 
 public class Network {
 
@@ -12,14 +13,6 @@ public class Network {
     private Integer packagesSent;
 
     public Network (){
-    }
-
-    public Network(Computer computer, String name, String ipv4, String macAddress, Integer packagesReceived, Integer packagesSent) {
-        this.computer = computer;
-        this.name = name;
-        this.macAddress = macAddress;
-        this.packagesReceived = packagesReceived;
-        this.packagesSent = packagesSent;
     }
 
     public Network(Computer computer, RedeInterface redeInterface) {
