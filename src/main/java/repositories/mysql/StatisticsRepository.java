@@ -11,10 +11,7 @@ import java.sql.SQLException;
 public class StatisticsRepository {
 
     public void save(Statistics statistics, ConnectionDatabase database) {
-        String command = """
-            INSERT INTO tb_statistics (id_computer, temperature, cpu_usage, ram_usage, ram_available, ram_total, disk_total, disk_usage)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-        """;
+        String command = "INSERT INTO tb_statistics (id_computer, temperature, cpu_usage, ram_usage, ram_available, ram_total, disk_total, disk_usage) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
         Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {

@@ -12,9 +12,7 @@ import java.sql.SQLException;
 public class ComputerRepository {
 
     public void save(Computer computer, ConnectionDatabase database) {
-        String command = """
-            INSERT INTO tb_computers (hostname, maker, system_info, id_cpu, id_disk, tb_companies_id) VALUES (?, ?, ?, ?, ?, ?);
-        """;
+        String command = "INSERT INTO tb_computers (hostname, maker, system_info, id_cpu, id_disk, tb_companies_id) VALUES (?, ?, ?, ?, ?, ?);";
 
         Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {

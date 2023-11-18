@@ -31,7 +31,7 @@ public class Application {
             STATISTICS_REPOSITORY.save(statistics, new ConnectionSqlServer());
             STATISTICS_REPOSITORY.save(statistics, new ConnectionMySql());
             System.out.println("Deveria ter salvado");
-            if(i == 1){
+            if(i == 15){
                 Util.createTextFileInRootDirectory(statistics, "logs" + logCounter + Instant.now());
                 logCounter++;
                 i = 0;

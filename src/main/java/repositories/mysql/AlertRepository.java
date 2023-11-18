@@ -15,9 +15,7 @@ public class AlertRepository {
     private ConnectionMySql connectionMySql;
 
     public Alert findByCompany(Company company, ConnectionDatabase database) {
-        String command = """
-            SELECT * FROM tb_alerts WHERE tb_companies_id = ?
-        """;
+        String command = "SELECT * FROM tb_alerts WHERE tb_companies_id = ?";
 
         Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {

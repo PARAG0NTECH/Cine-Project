@@ -11,10 +11,7 @@ import java.sql.SQLException;
 public class NetworkRepository {
 
     public void save(Network network, ConnectionDatabase database) {
-        String command = """
-            INSERT INTO tb_network (id_computer, name, mac_address, packages_received, packages_sent)
-            VALUES (?, ?, ?, ?, ?);
-        """;
+        String command = "INSERT INTO tb_network (id_computer, name, mac_address, packages_received, packages_sent) VALUES (?, ?, ?, ?, ?);";
 
         Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {

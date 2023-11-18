@@ -11,9 +11,7 @@ import java.sql.SQLException;
 public class DiskRepository {
 
     public void save(Disk disk, ConnectionDatabase database) {
-        String command = """
-            INSERT INTO tb_disk (id, model) VALUES (?, ?);
-        """;
+        String command = "INSERT INTO tb_disk (id, model) VALUES (?, ?);";
 
         Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {

@@ -1,10 +1,9 @@
 package utils;
 
-import com.slack.api.Slack;
-import com.slack.api.methods.SlackApiException;
-import com.slack.api.methods.request.chat.ChatPostMessageRequest;
-import com.slack.api.methods.response.chat.ChatPostMessageResponse;
-import entities.Alert;
+    import com.slack.api.Slack;
+    import com.slack.api.methods.SlackApiException;
+    import com.slack.api.methods.request.chat.ChatPostMessageRequest;
+    import com.slack.api.methods.response.chat.ChatPostMessageResponse;
 import entities.Statistics;
 
 import java.io.File;
@@ -25,7 +24,7 @@ public abstract class Util {
     }
 
     public static void sendAlert(double taxCpu, double taxDisk, double taxRam, double cpuUsage, double diskUsage, double ramUsage){
-        String slackToken = "xoxp-6214323179937-6224675652064-6201610227139-cdbb4e1b24d9a6034dcdf4b9e86af615";
+        String slackToken = "xoxp-6214323179937-6224675652064-6240342738320-8cd01c41922034d6af963d210e979129";
         Slack slack = Slack.getInstance();
 
         String message = buildMessage(taxCpu, taxDisk, taxRam, cpuUsage, diskUsage, ramUsage);
@@ -105,7 +104,7 @@ public abstract class Util {
                         "REGISTRO DE CAPTURA DE HARDWARE\n" +
                         "Data e Hora: " + Instant.now() + "\n" +
                         "Dispositivo: " + statistics.getComputer().getId() +
-                        "-----------------------------------\n" +
+                        "\n-----------------------------------\n" +
                         "\n" +
                         "[Detalhes da Captura]\n" +
                         "\n" +

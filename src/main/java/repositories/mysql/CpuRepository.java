@@ -11,9 +11,7 @@ import java.sql.SQLException;
 public class CpuRepository {
 
     public void save(Cpu cpu, ConnectionDatabase database) {
-        String command = """
-            INSERT INTO tb_cpu (id, name) VALUES (?, ?);
-        """;
+        String command = "INSERT INTO tb_cpu (id, name) VALUES (?, ?);";
 
         Connection conn = database.getConnection();
         try (PreparedStatement st = conn.prepareStatement(command)) {
