@@ -99,23 +99,5 @@ public class Application {
             diskUsage = (double) disco.getBytesDeEscritas();
             statistics.setDiskUsage(calculateGigaBytes(diskUsage));
         }
-
-        sendAlerts(cpuUsage, diskUsage, ramUsage);
-    }
-
-    private static void sendAlerts(double cpuUsage, double diskUsage, double ramUsage) {
-
-        Alert alert = ALERT_REPOSITORY.findByCompany(new Company(1), new ConnectionSqlServer());
-
-        double taxCpu = cpuUsage * (alert.getPercentualCpu() / 100);
-        double taxDisk = diskUsage * (alert.getPercentualCpu() / 100);
-        double taxRam = ramUsage * (alert.getPercentualCpu() / 100);
-
-        if(cpuUsage >= taxCpu ||
-           diskUsage >= taxDisk ||
-           ramUsage >= taxRam){
-            Util.sendAlert(taxCpu, taxDisk, taxRam, cpuUsage, diskUsage, ramUsage);
-        }
-
     }
 }
