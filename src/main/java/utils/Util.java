@@ -67,7 +67,7 @@ public abstract class Util {
     }
 
     private static void writeToFile(File file, String content) {
-        try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
+        try (FileWriter writer = new FileWriter(file)) {
             writer.write(content);
             System.out.println("Conteúdo adicionado ao arquivo");
         } catch (IOException e) {
